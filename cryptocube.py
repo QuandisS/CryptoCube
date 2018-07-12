@@ -138,7 +138,7 @@ def encrypt(data, filename):
 
     key = ''
 
-    if multiple_rotation == False:
+    if not multiple_rotation:
         generations = random.randint(3, 10)
         key += 'A|'
         for i in range(generations):
