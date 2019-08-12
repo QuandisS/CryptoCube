@@ -1,4 +1,5 @@
 import os, random
+import colorama as c
 
 class Cube():
 
