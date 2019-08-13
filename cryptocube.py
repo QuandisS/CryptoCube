@@ -1,6 +1,7 @@
 import os, random
 import colorama as c
 
+
 class Cube():
 
     def __init__(self):
@@ -9,11 +10,12 @@ class Cube():
                      '1.1.1': ' ', '1.0.1': ' '}
 
     def read(self):
-        res = self.data['0.0.0'] + self.data['0.1.0'] + self.data['1.1.0'] + self.data['1.0.0'] + self.data['0.0.1'] + self.data['0.1.1'] + self.data['1.1.1'] + self.data['1.0.1']
+        res = self.data['0.0.0'] + self.data['0.1.0'] + self.data['1.1.0'] + self.data['1.0.0'] + self.data['0.0.1'] + \
+              self.data['0.1.1'] + self.data['1.1.1'] + self.data['1.0.1']
         return res
 
     def rotate(self, way):
-        #copy
+        # copy
         data000c = self.data['0.0.0']
         data010c = self.data['0.1.0']
         data110c = self.data['1.1.0']
@@ -22,7 +24,7 @@ class Cube():
         data011c = self.data['0.1.1']
         data111c = self.data['1.1.1']
         data101c = self.data['1.0.1']
-        #copy end
+        # copy end
 
         if way == "U":
             self.data['0.0.0'] = data001c
@@ -64,12 +66,12 @@ class Cube():
             self.data['1.1.1'] = data110c
             self.data['1.0.1'] = data100c
 
-
     def return_data(self):
         return self.data
 
     def set_data(self, symb, pos):
         self.data.update({pos: symb})
+
 
 def key_output_in_file(data, name):
     os.mkdir(name)
@@ -86,6 +88,7 @@ def key_output_in_file(data, name):
 
     f.close()
 
+
 def msg_output_in_file(data, name):
     f = open(name + '/' + name + '.ccm', 'w')
 
@@ -99,15 +102,17 @@ def msg_output_in_file(data, name):
 
     f.close()
 
+
 def encrypt(data, filename):
-    print('\n'*2 + 'Encrypting...')
+    print('Encrypting...')
     ways = ['L', 'R', 'U', 'D']
 
-    cubes_number = len(data)//8
+    cubes_number = len(data) // 8
     if len(data) % 8 != 0:
         cubes_number += 1
 
-    print('Cubes number:', cubes_number)
+    # Uncomment for debug
+    # print('Cubes number:', cubes_number)
 
     cubes = []
 
@@ -123,19 +128,22 @@ def encrypt(data, filename):
                 break
             else:
                 cube.set_data(msg_data[symb_number], position)
-                print("Value:<" + msg_data[symb_number] +"> set at pos[" + position + '] at cube ' + str(i))
+                # Uncomment for debug
+                # print("Value:<" + msg_data[symb_number] + "> set at pos[" + position + '] at cube ' + str(i))
                 symb_number += 1
         cubes.append(cube)
 
-    print('Cubes in list:', len(cubes))
-    print('Multiple rotation:', multiple_rotation)
+    # Uncomment for debug
+    # print('Cubes in list:', len(cubes))
+    # print('Multiple rotation:', multiple_rotation)
 
     pre_read = ""
 
     for cu in cubes:
         pre_read += cu.read()
 
-    print('Pre-read: ', pre_read)
+    # Uncomment for debug
+    # print('Pre-read: ', pre_read)
 
     key = ''
 
@@ -151,23 +159,26 @@ def encrypt(data, filename):
                 key += way + ':'
             for cu in cubes:
                 cu.rotate(way)
-
-    print('Key:', key)
+    # Uncomment for debug
+    # print('Key:', key)
 
     key = list(key)
 
     post_read = ''
     for cu in cubes:
         post_read += cu.read()
-    print('Ready msg:', post_read)
+    # Uncomment for debug
+    # print('Ready msg:', post_read)
+    print(c.Fore.GREEN + "DONE!" + c.Style.RESET_ALL)
 
     key_output_in_file(key, filename)
     msg_output_in_file(list(post_read), filename)
 
-    print('\n'*2)
+    print('\n')
+
 
 def decrypt(filename, keyname):
-    print('\n'*2 + 'Decrypting...')
+    print('Decrypting...')
     f = open(filename, 'r')
     msg = f.read()
     f.close()
@@ -175,8 +186,9 @@ def decrypt(filename, keyname):
     key = f.read()
     f.close()
 
-    print('Msg='+str(msg))
-    print('Key='+str(key))
+    # Uncomment for debug
+    # print('Msg=' + str(msg))
+    # print('Key=' + str(key))
 
     msg = str(msg)
     msg = list(msg)
@@ -196,7 +208,8 @@ def decrypt(filename, keyname):
                 break
             else:
                 cube.set_data(msg[symb_number], position)
-                print("Value:<" + msg[symb_number] + "> set at pos[" + position + '] at cube ' + str(i))
+                # Uncomment for debug
+                # print("Value:<" + msg[symb_number] + "> set at pos[" + position + '] at cube ' + str(i))
                 symb_number += 1
         cubes.append(cube)
 
@@ -205,17 +218,20 @@ def decrypt(filename, keyname):
     for cu in cubes:
         pre_read += cu.read()
 
-    print('Pre-read: ', pre_read)
+    # Uncomment for debug
+    # print('Pre-read: ', pre_read)
 
     key = str(key)
     key = key.split('|')
 
     if key[0] == 'A':
-        print('Using NO multiple rotation algorithm...')
+        # Uncomment for debug
+        # print('Using NO multiple rotation algorithm...')
         key.pop(0)
         key = key[0]
         key_commands = key.split(':')
-        print('Key commands:', key_commands)
+        # Uncomment for debug
+        # print('Key commands:', key_commands)
         decrypt_commands = []
         for bar in key_commands:
             if bar == 'U':
@@ -227,10 +243,11 @@ def decrypt(filename, keyname):
             if bar == 'R':
                 decrypt_commands.append('L')
 
-        print('Decrypt commands:', decrypt_commands)
+        # Uncomment for debug
+        # print('Decrypt commands:', decrypt_commands)
         decrypt_commands.reverse()
-        print('Reversed decrypt commands:', decrypt_commands)
-        print('Rotating...')
+        # print('Reversed decrypt commands:', decrypt_commands)
+        # print('Rotating...')
 
         for foo in decrypt_commands:
             for cu in cubes:
@@ -241,22 +258,20 @@ def decrypt(filename, keyname):
         for cu in cubes:
             post_read += cu.read()
 
-        print('\n' +"========")
-        print('Decrypted message:', post_read)
+        print('\n' + "========")
+        print(c.Style.BRIGHT + 'Decrypted message:' + c.Style.RESET_ALL, post_read)
         print("========" + '\n')
 
-        print('\n'*2)
     pass
 
 
-#data  = ['1', '2', '3']
-#output_in_file(data, "test")
+# data  = ['1', '2', '3']
+# output_in_file(data, "test")
 
 
 #####
 multiple_rotation = False
 #####
-
 
 
 while True:
@@ -266,7 +281,7 @@ while True:
     if user_input == "E" or user_input == "e":
         print("Please, enter your msg:")
         data = input(">>")
-        print("Please, enter file name:")
+        print("Please, enter directory name:")
         filename = input(">>")
         encrypt(data, filename)
 
